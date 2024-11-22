@@ -8,6 +8,7 @@ import { WordDetailsFactoryService } from './services/word_details_retrievers/wo
 import { VerbDetailsRetrieverService } from './services/word_details_retrievers/verb_details_retriever.service';
 import { GetWordInfoUsecase } from './usecases/get_word_info.usecase';
 import { NounDetailsRetrieverService } from './services/word_details_retrievers/noun_details_retriever.service';
+import { AdjectiveDetailsRetrieverService } from './services/word_details_retrievers/adjective_details_retriever.service';
 
 const aiServiceProvider: Provider = {
   provide: AIService,
@@ -31,6 +32,7 @@ const aiServiceProvider: Provider = {
     WordDetailsFactoryService,
     VerbDetailsRetrieverService,
     NounDetailsRetrieverService,
+    AdjectiveDetailsRetrieverService,
     GetWordInfoUsecase,
   ],
 })

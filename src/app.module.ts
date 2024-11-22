@@ -1,8 +1,9 @@
 import { Module, Provider } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AIService } from './ai_services/ai.service';
-import { OpenAIService } from './ai_services/openai.service';
+import { AIService } from './services/ai_services/ai.service';
+import { OpenAIService } from './services/ai_services/openai.service';
+import { AppController } from './controllers/app.controller';
+import { WordTypeRetrieverService } from './services/word_type_retriever.service';
 
 const aiServiceProvider: Provider = {
   provide: AIService,
@@ -20,6 +21,6 @@ const aiServiceProvider: Provider = {
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true })],
   controllers: [AppController],
-  providers: [aiServiceProvider],
+  providers: [aiServiceProvider, WordTypeRetrieverService],
 })
 export class AppModule {}

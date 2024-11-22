@@ -5,6 +5,8 @@ import { AIService } from './ai.service';
 
 @Injectable()
 export class OpenAIService implements AIService {
+  private readonly MODEL: string = 'gpt-4o-mini';
+
   private openai: OpenAI;
 
   constructor(private configService: ConfigService) {
@@ -16,14 +18,14 @@ export class OpenAIService implements AIService {
     this.openai = new OpenAI({ apiKey });
   }
 
-  async askQuestion(): Promise<string> {
+  async run(systemRoleInput: string, userRoleInput: string): Promise<string> {
     const completion = await this.openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: this.MODEL,
       messages: [
-        { role: 'system', content: 'You are a helpful assistant.' },
+        { role: 'system', content: systemRoleInput },
         {
           role: 'user',
-          content: 'translate the world "School" to German and put it in an example',
+          content: userRoleInput,
         },
       ],
     });

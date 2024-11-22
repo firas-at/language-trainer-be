@@ -1,6 +1,6 @@
 export enum WordType {
-  Verb,
-  Noun,
-  Adjective,
-  Adverb,
+  Verb = 'Verb',
+  Noun = 'Noun',
+  Adjective = 'Adjective',
+  Adverb = 'Adverb',
 }

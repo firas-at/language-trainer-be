@@ -23,10 +23,7 @@ export class OpenAIService implements AIService {
       model: this.MODEL,
       messages: [
         { role: 'system', content: systemRoleInput },
-        {
-          role: 'user',
-          content: userRoleInput,
-        },
+        { role: 'user', content: userRoleInput },
       ],
     });
 

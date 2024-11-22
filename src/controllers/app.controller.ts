@@ -1,15 +1,12 @@
-import { Controller, Get } from '@nestjs/common';
-import { WordType } from 'src/models/word_type';
-import { WordTypeRetrieverService } from 'src/services/word_type_retriever.service';
+import { Controller, Get, Query } from '@nestjs/common';
+import { GetWordInfoUsecase } from 'src/usecases/get_word_info.usecase';
 
 @Controller()
 export class AppController {
-  constructor(
-    private readonly wordTypeDetectorService: WordTypeRetrieverService,
-  ) {}
+  constructor(private readonly getWordInfoUsecase: GetWordInfoUsecase) {}
 
   @Get()
-  async getHello(): Promise<WordType> {
-    return await this.wordTypeDetectorService.run('schon');
+  async getHello(@Query('word') word: string): Promise<string> {
+    return this.getWordInfoUsecase.run(word);
   }
 }

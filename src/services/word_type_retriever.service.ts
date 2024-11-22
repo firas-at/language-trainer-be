@@ -2,13 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { AIService } from './ai_services/ai.service';
 import { WordTypeResponse } from 'src/models/responses/word_type_response';
 
-enum WordType {
-  Verb,
-  Noun,
-  Adjective,
-  Adverb,
-}
-
 @Injectable()
 export class WordTypeRetrieverService {
   SYSTEM_PROMPT = `
@@ -25,9 +18,8 @@ export class WordTypeRetrieverService {
 
   constructor(private readonly aiService: AIService) {}
 
-  async run(word: string): Promise<WordType> {
+  async run(word: string): Promise<WordTypeResponse> {
     const response = await this.aiService.run(this.SYSTEM_PROMPT, word);
-    const wordTypeResponse = JSON.parse(response) as WordTypeResponse;
-    return wordTypeResponse.type;
+    return JSON.parse(response) as WordTypeResponse;
   }
 }

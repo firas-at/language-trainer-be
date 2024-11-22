@@ -4,6 +4,9 @@ import { AIService } from './services/ai_services/ai.service';
 import { OpenAIService } from './services/ai_services/openai.service';
 import { AppController } from './controllers/app.controller';
 import { WordTypeRetrieverService } from './services/word_type_retriever.service';
+import { WordDetailsFactoryService } from './services/word_details_retrievers/word_details_factory.service';
+import { VerbDetailsRetrieverService } from './services/word_details_retrievers/verb_details_retriever.service';
+import { GetWordInfoUsecase } from './usecases/get_word_info.usecase';
 
 const aiServiceProvider: Provider = {
   provide: AIService,
@@ -21,6 +24,12 @@ const aiServiceProvider: Provider = {
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true })],
   controllers: [AppController],
-  providers: [aiServiceProvider, WordTypeRetrieverService],
+  providers: [
+    aiServiceProvider,
+    WordTypeRetrieverService,
+    WordDetailsFactoryService,
+    VerbDetailsRetrieverService,
+    GetWordInfoUsecase,
+  ],
 })
 export class AppModule {}

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AIService } from '../ai_services/ai.service';
 import { WordDetailsRetrieverService } from './word_details_retriever.service';
+import { VerbInfo } from 'src/models/verb_info';
 
 @Injectable()
 export class VerbDetailsRetrieverService extends WordDetailsRetrieverService {
@@ -18,7 +19,8 @@ export class VerbDetailsRetrieverService extends WordDetailsRetrieverService {
     super();
   }
 
-  async getDetails(word: string): Promise<string> {
-    return await this.aiService.run(this.SYSTEM_PROMPT, word);
+  async getDetails(word: string): Promise<VerbInfo> {
+    const response = await this.aiService.run(this.SYSTEM_PROMPT, word);
+    return JSON.parse(response);
   }
 }

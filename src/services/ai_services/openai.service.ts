@@ -21,6 +21,9 @@ export class OpenAIService implements AIService {
   async run(systemRoleInput: string, userRoleInput: string): Promise<string> {
     const completion = await this.openai.chat.completions.create({
       model: this.MODEL,
+      response_format: {
+        type: 'json_object',
+      },
       messages: [
         { role: 'system', content: systemRoleInput },
         { role: 'user', content: userRoleInput },

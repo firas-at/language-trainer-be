@@ -1,12 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { AIService } from './ai_services/ai.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly aiService: AIService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  async getHello(): Promise<string> {
+    return this.aiService.askQuestion();
   }
 }

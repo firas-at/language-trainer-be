@@ -1,5 +1,5 @@
 services:
-  nestjs-app:
+  language-trainer-app:
     build:
       context: .
       dockerfile: Dockerfile.dev
@@ -9,5 +9,27 @@ services:
     ports:
       - $PORT:$PORT
     environment:
-      - NODE_ENV=development
-    command: ["npm", "run", "start:dev"]
+      NODE_ENV: development
+      DB_HOST: $DB_HOST
+      DB_NAME: $DB_NAME
+      DB_USER: $DB_USER
+      DB_PASSWORD: $DB_PASSWORD
+    depends_on:
+      - db
+    command: ['npm', 'run', 'start:dev']
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: $DB_NAME
+      MYSQL_USER: $DB_USER
+      MYSQL_PASSWORD: $DB_PASSWORD
+      MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+    ports:
+      - $DB_PORT:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
+    driver: local

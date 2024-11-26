@@ -1,0 +1,34 @@
+name: NestJS Unit Tests
+
+on:
+  push:
+    branches:
+      - main
+      - "feature/*"  # Or any other branches you want to trigger tests on
+  pull_request:
+    branches:
+      - main
+      - "feature/*"  # Or any other branches you want to trigger tests on
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Checkout code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Adjust the Node.js version based on your project
+      
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Run the tests
+      - name: Run tests
+        run: npm run test -- --ci --reporters=default --maxWorkers=2

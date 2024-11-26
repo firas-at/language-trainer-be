@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { WordType } from 'src/models/word_type';
+import { WordType } from 'src/aiservice-module/models/word_type';
 import { VerbDetailsRetrieverService } from './verb_details_retriever.service';
-import { WordInfo } from 'src/models/word_info';
+import { WordInfo } from 'src/aiservice-module/models/word_info';
 import { NounDetailsRetrieverService } from './noun_details_retriever.service';
 import { AdjectiveDetailsRetrieverService } from './adjective_details_retriever.service';
 

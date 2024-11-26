@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AIService } from './ai_services/ai.service';
-import { WordTypeResponse } from 'src/models/responses/word_type_response';
+import { WordTypeResponse } from 'src/aiservice-module/models/responses/word_type_response';
 
 @Injectable()
 export class WordTypeRetrieverService {

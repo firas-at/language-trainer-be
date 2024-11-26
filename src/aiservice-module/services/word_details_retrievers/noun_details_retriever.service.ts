@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { WordDetailsRetrieverService } from './word_details_retriever.service';
 import { AIService } from '../ai_services/ai.service';
-import { WordType } from 'src/models/word_type';
-import { NounInfo } from 'src/models/noun_info';
+import { WordType } from 'src/aiservice-module/models/word_type';
+import { NounInfo } from 'src/aiservice-module/models/noun_info';
 
 @Injectable()
 export class NounDetailsRetrieverService extends WordDetailsRetrieverService {

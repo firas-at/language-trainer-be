@@ -7,7 +7,7 @@ import { AIService } from './ai.service';
 export class OpenAIService implements AIService {
   private readonly MODEL: string = 'gpt-4o-mini';
 
-  private openai: OpenAI;
+  public openai: OpenAI;
 
   constructor(private configService: ConfigService) {
     const apiKey = this.configService.get<string>('OPENAI_API_KEY');

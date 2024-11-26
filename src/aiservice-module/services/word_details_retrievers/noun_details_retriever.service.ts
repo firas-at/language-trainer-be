@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { WordDetailsRetrieverService } from './word_details_retriever.service';
 import { AIService } from '../ai_services/ai.service';
-import { WordType } from 'src/aiservice-module/models/word_type';
 import { NounInfo } from 'src/aiservice-module/models/noun_info';
+import { WordType } from '../../models/word_type';
 
 @Injectable()
 export class NounDetailsRetrieverService extends WordDetailsRetrieverService {
-  private readonly SYSTEM_PROMPT = `
+  static readonly SYSTEM_PROMPT = `
         You are a  German dictionary specific for nouns, and you will help German language learners get information about the nouns, for each provided noun you need to provide the following information in json format:
             - translation: The meaning of the verb in English.
             - sentence_example
@@ -19,7 +19,10 @@ export class NounDetailsRetrieverService extends WordDetailsRetrieverService {
   }
 
   async getDetails(word: string): Promise<NounInfo> {
-    const response = await this.aiService.run(this.SYSTEM_PROMPT, word);
+    const response = await this.aiService.run(
+      NounDetailsRetrieverService.SYSTEM_PROMPT,
+      word,
+    );
     const nounInfo = JSON.parse(response) as NounInfo;
     nounInfo.type = WordType.Noun;
     return nounInfo;

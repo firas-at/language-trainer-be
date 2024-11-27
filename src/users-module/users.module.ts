@@ -13,6 +13,7 @@ import { User } from './models/user';
       useClass: UsersMysqlRepository,
     },
   ],
+  exports: [UsersRepository],
   controllers: [UsersController],
 })
 export class UsersModule {}

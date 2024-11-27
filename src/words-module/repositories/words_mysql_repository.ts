@@ -3,6 +3,7 @@ import { WordsRepository } from './words.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Word } from '../models/word';
 import { Repository } from 'typeorm';
+import { WordType } from 'src/aiservice-module/models/word_type';
 
 @Injectable()
 export class WordsMysqlRepository extends WordsRepository {
@@ -13,8 +14,8 @@ export class WordsMysqlRepository extends WordsRepository {
     super();
   }
 
-  insert(word: string, info: any) {
-    const newWord = this.wordsRepository.create({ key: word, info }); // Creates a new User instance
+  insert(word: string, type: WordType, info: any) {
+    const newWord = this.wordsRepository.create({ key: word, type, info }); // Creates a new User instance
     return this.wordsRepository.save(newWord); // Saves it to the database
   }
 

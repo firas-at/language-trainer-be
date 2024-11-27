@@ -30,7 +30,7 @@ export class UserWordManagerService {
       const wordInfo = await this.getWordInfoUsecase.run(word);
 
       //store the info in words table
-      this.wordsRepository.insert(word, wordInfo);
+      this.wordsRepository.insert(word, wordInfo.type, wordInfo);
 
       //store the word in user word
       this.userWordsRepository.insert(user.id, word);

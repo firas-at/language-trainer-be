@@ -13,6 +13,9 @@ export const WordEntity = new EntitySchema<Word>({
     key: {
       type: String,
     },
+    type: {
+      type: String,
+    },
     info: {
       type: 'json',
     },

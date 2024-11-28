@@ -15,12 +15,9 @@ export class UserWordsMysqlRepository extends UserWordsRepository {
     super();
   }
 
-  /**
-   * Adds a word to a user only if it doesn't already exist.
-   */
   async addWordToUser(user: User, word: Word): Promise<UserWord> {
     try {
-      const userWord = await this.getWordForUser(user, word);
+      const userWord = await this.getUserWordForUser(user, word);
 
       if (!userWord) {
         const userWord = this.userWordsRepository.create({ user, word });
@@ -35,9 +32,6 @@ export class UserWordsMysqlRepository extends UserWordsRepository {
     }
   }
 
-  /**
-   * Fetches all words associated with a specific user.
-   */
   async getWordsForUser(user: User): Promise<Word[]> {
     try {
       const userWords = await this.userWordsRepository.find({
@@ -53,10 +47,7 @@ export class UserWordsMysqlRepository extends UserWordsRepository {
     }
   }
 
-  /**
-   * Fetches a specific word for a specific user.
-   */
-  async getWordForUser(user: User, word: Word): Promise<UserWord | null> {
+  async getUserWordForUser(user: User, word: Word): Promise<UserWord | null> {
     try {
       const userWords = await this.userWordsRepository
         .createQueryBuilder('UserWord')

@@ -5,5 +5,5 @@ import { User } from 'src/users-module/entities/user';
 export abstract class UserWordsRepository {
   abstract addWordToUser(user: User, word: Word): Promise<UserWord>;
   abstract getWordsForUser(user: User): Promise<Word[]>;
-  abstract getWordForUser(user: User, word: Word): Promise<UserWord | null>;
+  abstract getUserWordForUser(user: User, word: Word): Promise<UserWord | null>;
 }

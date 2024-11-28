@@ -14,7 +14,7 @@ export class WordsMysqlRepository extends WordsRepository {
     super();
   }
 
-  async insert(word: string, type: WordType, info: any) {
+  async addWord(word: string, type: WordType, info: any) {
     try {
       const newWord = this.wordsRepository.create({ key: word, type, info });
       return await this.wordsRepository.save(newWord);
@@ -23,7 +23,7 @@ export class WordsMysqlRepository extends WordsRepository {
     }
   }
 
-  async find(word: string): Promise<Word> {
+  async getWord(word: string): Promise<Word> {
     try {
       const words = await this.wordsRepository.find({ where: { key: word } });
       return words.length > 0 ? words[0] : null;

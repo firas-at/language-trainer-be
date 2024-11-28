@@ -16,27 +16,29 @@ export class UserWordManagerService {
   async getWordInfo(userId: number, word: string) {
     // check if userId exists
     const user = await this.usersRepository.findById(userId);
-    if (user === undefined)
-      throw new NotFoundException(`User not found: ${userId}`);
+    if (user === null) throw new NotFoundException(`User not found: ${userId}`);
 
-    //check if it already exists in user word
-    const userWords = await this.userWordsRepository.findAll(user.id, word);
+    // check if word definition exists
+    let wordObj = await this.wordsRepository.find(word);
 
-    //if it exists
-    if (userWords.length > 0) {
-      //get the word info from words table and return it
-      return await this.wordsRepository.find(word);
-    } else {
-      //get word info using ai service
+    // if word definition doesn't exist, then retrieve and insert it
+    if (wordObj === null) {
       const wordInfo = await this.getWordInfoFromAIService.run(word);
-
-      //store the info in words table
-      this.wordsRepository.insert(word, wordInfo.type, wordInfo);
-
-      //store the word in user word
-      this.userWordsRepository.insert(user.id, word);
-
-      return wordInfo;
+      await this.wordsRepository.insert(word, wordInfo.type, wordInfo);
+      wordObj = await this.wordsRepository.find(word);
     }
+
+    // check if user already has the word
+    const userWords = await this.userWordsRepository.getWordForUser(
+      user,
+      wordObj,
+    );
+
+    // add the word to the user if it doesn't exist
+    if (userWords === null) {
+      this.userWordsRepository.addWordToUser(user, wordObj);
+    }
+
+    return wordObj;
   }
 }

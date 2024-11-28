@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { AIService } from '../ai_services/ai.service';
 import { WordDetailsRetrieverService } from './word_details_retriever.service';
 import { VerbInfo } from 'src/aiservice-module/models/verb_info';
@@ -21,12 +21,18 @@ export class VerbDetailsRetrieverService extends WordDetailsRetrieverService {
   }
 
   async getDetails(word: string): Promise<VerbInfo> {
-    const response = await this.aiService.run(
-      VerbDetailsRetrieverService.SYSTEM_PROMPT,
-      word,
-    );
-    const verbInfo = JSON.parse(response) as VerbInfo;
-    verbInfo.type = WordType.Verb;
-    return verbInfo;
+    try {
+      const response = await this.aiService.run(
+        VerbDetailsRetrieverService.SYSTEM_PROMPT,
+        word,
+      );
+      const verbInfo = JSON.parse(response) as VerbInfo;
+      verbInfo.type = WordType.Verb;
+      return verbInfo;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Error getting verb details: ${error}`,
+      );
+    }
   }
 }

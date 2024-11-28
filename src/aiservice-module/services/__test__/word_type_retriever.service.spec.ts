@@ -1,3 +1,4 @@
+import { InternalServerErrorException } from '@nestjs/common';
 import { WordType } from '../../models/word_type';
 import { OpenAIService } from '../ai_services/openai.service';
 import { WordTypeRetrieverService } from '../word_type_retriever.service';
@@ -47,6 +48,14 @@ describe('WordTypeRetrieverService', () => {
         word: 'laufen',
         type: WordType.Verb,
       });
+    });
+
+    it("should throw an error if open AI didn't work", async () => {
+      jest
+        .spyOn(openAIService, 'run')
+        .mockRejectedValue(new InternalServerErrorException('error')); // Mock run method of OpenAIService
+
+      await expect(() => service.run(mockWord)).rejects.toThrow('error');
     });
   });
 });

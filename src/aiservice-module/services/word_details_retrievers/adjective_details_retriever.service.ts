@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { WordDetailsRetrieverService } from './word_details_retriever.service';
 import { AIService } from '../ai_services/ai.service';
 import { AdjectiveInfo } from 'src/aiservice-module/models/adjective_info';
@@ -20,12 +20,18 @@ export class AdjectiveDetailsRetrieverService extends WordDetailsRetrieverServic
   }
 
   async getDetails(word: string): Promise<AdjectiveInfo> {
-    const response = await this.aiService.run(
-      AdjectiveDetailsRetrieverService.SYSTEM_PROMPT,
-      word,
-    );
-    const adjectiveInfo = JSON.parse(response) as AdjectiveInfo;
-    adjectiveInfo.type = WordType.Adjective;
-    return adjectiveInfo;
+    try {
+      const response = await this.aiService.run(
+        AdjectiveDetailsRetrieverService.SYSTEM_PROMPT,
+        word,
+      );
+      const adjectiveInfo = JSON.parse(response) as AdjectiveInfo;
+      adjectiveInfo.type = WordType.Adjective;
+      return adjectiveInfo;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Error getting adj details: ${error}`,
+      );
+    }
   }
 }

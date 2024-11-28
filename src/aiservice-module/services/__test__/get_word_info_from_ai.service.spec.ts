@@ -1,16 +1,14 @@
-import { GetWordInfoUsecase } from '../get_word_info.usecase';
-import { WordDetailsFactoryService } from '../../services/word_details_retrievers/word_details_factory.service';
-import { WordTypeRetrieverService } from '../../services/word_type_retriever.service';
+import { GetWordInfoFromAIService } from '../get_word_info_from_ai.service';
+import { WordDetailsFactoryService } from '../word_details_retrievers/word_details_factory.service';
+import { WordTypeRetrieverService } from '../word_type_retriever.service';
 import { WordInfo } from '../../models/word_info';
 import { WordType } from '../../models/word_type';
 
-jest.mock(
-  '../../services/word_details_retrievers/word_details_factory.service',
-);
-jest.mock('../../services/word_type_retriever.service');
+jest.mock('../word_details_retrievers/word_details_factory.service');
+jest.mock('../word_type_retriever.service');
 
-describe('GetWordInfoUsecase', () => {
-  let service: GetWordInfoUsecase;
+describe('GetWordInfoFromAIService', () => {
+  let service: GetWordInfoFromAIService;
   let wordDetailsFactory: WordDetailsFactoryService;
   let wordTypeRetriever: WordTypeRetrieverService;
 
@@ -18,11 +16,14 @@ describe('GetWordInfoUsecase', () => {
     wordDetailsFactory = new WordDetailsFactoryService(null, null, null); // Mock the WordDetailsFactoryService
     wordTypeRetriever = new WordTypeRetrieverService(null); // Mock the WordTypeRetrieverService
 
-    service = new GetWordInfoUsecase(wordDetailsFactory, wordTypeRetriever);
+    service = new GetWordInfoFromAIService(
+      wordDetailsFactory,
+      wordTypeRetriever,
+    );
   });
 
   describe('constructor', () => {
-    it('should initialize GetWordInfoUsecase with the required services', () => {
+    it('should initialize GetWordInfoFromAIService with the required services', () => {
       expect(service).toBeDefined();
     });
   });

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { AIService } from './ai_services/ai.service';
 import { WordTypeResponse } from 'src/aiservice-module/models/responses/word_type_response';
 
@@ -19,10 +19,16 @@ export class WordTypeRetrieverService {
   constructor(private readonly aiService: AIService) {}
 
   async run(word: string): Promise<WordTypeResponse> {
-    const response = await this.aiService.run(
-      WordTypeRetrieverService.SYSTEM_PROMPT,
-      word,
-    );
-    return JSON.parse(response) as WordTypeResponse;
+    try {
+      const response = await this.aiService.run(
+        WordTypeRetrieverService.SYSTEM_PROMPT,
+        word,
+      );
+      return JSON.parse(response) as WordTypeResponse;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Error getting word type: ${error}`,
+      );
+    }
   }
 }

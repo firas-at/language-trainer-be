@@ -1,3 +1,4 @@
+import { InternalServerErrorException } from '@nestjs/common';
 import { WordType } from '../../../models/word_type';
 import { OpenAIService } from '../../ai_services/openai.service';
 import { AdjectiveDetailsRetrieverService } from '../adjective_details_retriever.service';
@@ -54,6 +55,14 @@ describe('AdjectiveDetailsRetrieverService', () => {
         opposite: 'klein',
         type: WordType.Adjective,
       });
+    });
+
+    it("should throw an error if open AI didn't work", async () => {
+      jest
+        .spyOn(openAIService, 'run')
+        .mockRejectedValue(new InternalServerErrorException('error')); // Mock run method of OpenAIService
+
+      await expect(() => service.getDetails(mockWord)).rejects.toThrow('error');
     });
   });
 });

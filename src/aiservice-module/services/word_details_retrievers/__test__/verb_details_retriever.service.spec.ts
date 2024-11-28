@@ -1,6 +1,7 @@
 import { WordType } from '../../../models/word_type';
 import { VerbDetailsRetrieverService } from '../verb_details_retriever.service';
 import { OpenAIService } from '../../ai_services/openai.service';
+import { InternalServerErrorException } from '@nestjs/common';
 
 jest.mock('../../ai_services/openai.service'); // Mock OpenAIService
 
@@ -56,6 +57,14 @@ describe('VerbDetailsRetrieverService', () => {
         praeteritum_form: 'las',
         type: WordType.Verb,
       });
+    });
+
+    it("should throw an error if open AI didn't work", async () => {
+      jest
+        .spyOn(openAIService, 'run')
+        .mockRejectedValue(new InternalServerErrorException('error')); // Mock run method of OpenAIService
+
+      await expect(() => service.getDetails(mockWord)).rejects.toThrow('error');
     });
   });
 });

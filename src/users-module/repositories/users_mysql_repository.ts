@@ -24,6 +24,6 @@ export class UsersMysqlRepository extends UsersRepository {
 
   async findById(id: number): Promise<User> {
     const users = await this.userRepository.find({ where: { id } });
-    return users[0];
+    return users.length > 0 ? users[0] : null;
   }
 }

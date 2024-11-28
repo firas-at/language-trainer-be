@@ -7,11 +7,13 @@ import { WordType } from '../../models/word_type';
 @Injectable()
 export class NounDetailsRetrieverService extends WordDetailsRetrieverService {
   static readonly SYSTEM_PROMPT = `
-        You are a  German dictionary specific for nouns, and you will help German language learners get information about the nouns, for each provided noun you need to provide the following information in json format:
-            - translation: The meaning of the verb in English.
-            - sentence_example
-            - gender (Artikel): Masculine (der), Feminine (die), or Neuter (das).
-            - plural_form: The plural version
+        You are a  German dictionary specific for nouns, and you will help German language learners get information about the nouns, for each provided noun return a JSON response with the following structure:
+        {
+            translation: string, //The meaning of the verb in English.
+            sentence_example: string,
+            gender: string, //Masculine (der), Feminine (die), or Neuter (das).
+            plural_form: string //The plural version
+        }
     `;
 
   constructor(private readonly aiService: AIService) {

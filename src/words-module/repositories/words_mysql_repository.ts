@@ -15,8 +15,8 @@ export class WordsMysqlRepository extends WordsRepository {
   }
 
   insert(word: string, type: WordType, info: any) {
-    const newWord = this.wordsRepository.create({ key: word, type, info }); // Creates a new User instance
-    return this.wordsRepository.save(newWord); // Saves it to the database
+    const newWord = this.wordsRepository.create({ key: word, type, info });
+    return this.wordsRepository.save(newWord);
   }
 
   async find(word: string): Promise<Word> {

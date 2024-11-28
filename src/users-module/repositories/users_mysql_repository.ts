@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user';
@@ -13,17 +13,33 @@ export class UsersMysqlRepository extends UsersRepository {
     super();
   }
 
-  insert(fullName: string) {
-    const newUser = this.userRepository.create({ fullName }); // Creates a new User instance
-    return this.userRepository.save(newUser); // Saves it to the database
+  async insert(fullName: string) {
+    try {
+      const newUser = this.userRepository.create({ fullName }); // Creates a new User instance
+      return await this.userRepository.save(newUser); // Saves it to the database
+    } catch (error) {
+      throw new InternalServerErrorException(`Error adding user: ${error}`);
+    }
   }
 
   async findAll(): Promise<User[]> {
-    return await this.userRepository.find();
+    try {
+      return await this.userRepository.find();
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Error getting all users: ${error}`,
+      );
+    }
   }
 
   async findById(id: number): Promise<User> {
-    const users = await this.userRepository.find({ where: { id } });
-    return users.length > 0 ? users[0] : null;
+    try {
+      const users = await this.userRepository.find({ where: { id } });
+      return users.length > 0 ? users[0] : null;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Error getting a user by id: ${error}`,
+      );
+    }
   }
 }

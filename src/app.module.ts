@@ -19,6 +19,7 @@ import { UserWord } from './user-words-module/entities/user_word';
       database: process.env.DB_NAME,
       entities: [User, Word, UserWord],
       synchronize: true,
+      logging: false,
     }),
     ConfigModule.forRoot({ isGlobal: true }),
     AIServiceModule,

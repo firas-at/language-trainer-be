@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { WordInfo } from 'src/aiservice-module/models/word_info';
-import { WordDetailsFactoryService } from '../services/word_details_retrievers/word_details_factory.service';
-import { WordTypeRetrieverService } from '../services/word_type_retriever.service';
+import { WordDetailsFactoryService } from './word_details_retrievers/word_details_factory.service';
+import { WordTypeRetrieverService } from './word_type_retriever.service';
 
 @Injectable()
-export class GetWordInfoUsecase {
+export class GetWordInfoFromAIService {
   constructor(
     private readonly wordDetailsFactory: WordDetailsFactoryService,
     private readonly wordTypeRetriever: WordTypeRetrieverService,

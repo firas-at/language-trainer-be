@@ -1,8 +1,8 @@
 import { WordsRepository } from 'src/words-module/repositories/words.repository';
 import { UserWordsRepository } from '../repositories/user-words.repository';
 import { UsersRepository } from 'src/users-module/repositories/users.repository';
-import { GetWordInfoUsecase } from 'src/aiservice-module/usecases/get_word_info.usecase';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { GetWordInfoFromAIService } from 'src/aiservice-module/services/get_word_info_from_ai.service';
 
 @Injectable()
 export class UserWordManagerService {
@@ -10,13 +10,14 @@ export class UserWordManagerService {
     private readonly userWordsRepository: UserWordsRepository,
     private readonly wordsRepository: WordsRepository,
     private readonly usersRepository: UsersRepository,
-    private readonly getWordInfoUsecase: GetWordInfoUsecase,
+    private readonly getWordInfoFromAIService: GetWordInfoFromAIService,
   ) {}
 
   async getWordInfo(userId: number, word: string) {
     // check if userId exists
     const user = await this.usersRepository.findById(userId);
-    if (user === undefined) return;
+    if (user === undefined)
+      throw new NotFoundException(`User not found: ${userId}`);
 
     //check if it already exists in user word
     const userWords = await this.userWordsRepository.findAll(user.id, word);
@@ -27,7 +28,7 @@ export class UserWordManagerService {
       return await this.wordsRepository.find(word);
     } else {
       //get word info using ai service
-      const wordInfo = await this.getWordInfoUsecase.run(word);
+      const wordInfo = await this.getWordInfoFromAIService.run(word);
 
       //store the info in words table
       this.wordsRepository.insert(word, wordInfo.type, wordInfo);

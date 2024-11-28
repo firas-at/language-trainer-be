@@ -6,7 +6,7 @@ import { WordDetailsFactoryService } from './services/word_details_retrievers/wo
 import { VerbDetailsRetrieverService } from './services/word_details_retrievers/verb_details_retriever.service';
 import { NounDetailsRetrieverService } from './services/word_details_retrievers/noun_details_retriever.service';
 import { AdjectiveDetailsRetrieverService } from './services/word_details_retrievers/adjective_details_retriever.service';
-import { GetWordInfoUsecase } from './usecases/get_word_info.usecase';
+import { GetWordInfoFromAIService } from './services/get_word_info_from_ai.service';
 
 @Module({
   providers: [
@@ -19,8 +19,8 @@ import { GetWordInfoUsecase } from './usecases/get_word_info.usecase';
     VerbDetailsRetrieverService,
     NounDetailsRetrieverService,
     AdjectiveDetailsRetrieverService,
-    GetWordInfoUsecase,
+    GetWordInfoFromAIService,
   ],
-  exports: [GetWordInfoUsecase],
+  exports: [GetWordInfoFromAIService],
 })
 export class AIServiceModule {}

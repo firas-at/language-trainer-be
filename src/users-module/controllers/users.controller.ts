@@ -12,12 +12,12 @@ export class UsersController {
   @ApiOperation({ summary: 'Get all users' })
   @Get()
   async getAll(): Promise<User[]> {
-    return await this.usersRepository.findAll();
+    return await this.usersRepository.getAllUsers();
   }
 
   @ApiOperation({ summary: 'Create new user' })
   @Post()
   async createUser(@Body() createUserDto: CreateUserDTO) {
-    return this.usersRepository.insert(createUserDto.fullName);
+    return this.usersRepository.addUser(createUserDto.fullName);
   }
 }

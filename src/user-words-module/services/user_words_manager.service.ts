@@ -15,21 +15,21 @@ export class UserWordManagerService {
 
   async getWordInfo(userId: number, word: string) {
     // check if userId exists
-    const user = await this.usersRepository.findById(userId);
+    const user = await this.usersRepository.getUser(userId);
     if (user === null) throw new NotFoundException(`User not found: ${userId}`);
 
     // check if word definition exists
-    let wordObj = await this.wordsRepository.find(word);
+    let wordObj = await this.wordsRepository.getWord(word);
 
     // if word definition doesn't exist, then retrieve and insert it
     if (wordObj === null) {
       const wordInfo = await this.getWordInfoFromAIService.run(word);
-      await this.wordsRepository.insert(word, wordInfo.type, wordInfo);
-      wordObj = await this.wordsRepository.find(word);
+      await this.wordsRepository.addWord(word, wordInfo.type, wordInfo);
+      wordObj = await this.wordsRepository.getWord(word);
     }
 
     // check if user already has the word
-    const userWords = await this.userWordsRepository.getWordForUser(
+    const userWords = await this.userWordsRepository.getUserWordForUser(
       user,
       wordObj,
     );

@@ -13,7 +13,7 @@ export class UsersMysqlRepository extends UsersRepository {
     super();
   }
 
-  async insert(fullName: string) {
+  async addUser(fullName: string) {
     try {
       const newUser = this.userRepository.create({ fullName }); // Creates a new User instance
       return await this.userRepository.save(newUser); // Saves it to the database
@@ -22,7 +22,7 @@ export class UsersMysqlRepository extends UsersRepository {
     }
   }
 
-  async findAll(): Promise<User[]> {
+  async getAllUsers(): Promise<User[]> {
     try {
       return await this.userRepository.find();
     } catch (error) {
@@ -32,7 +32,7 @@ export class UsersMysqlRepository extends UsersRepository {
     }
   }
 
-  async findById(id: number): Promise<User> {
+  async getUser(id: number): Promise<User> {
     try {
       const users = await this.userRepository.find({ where: { id } });
       return users.length > 0 ? users[0] : null;

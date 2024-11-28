@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { WordsRepository } from './words.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Word } from '../models/word';
+import { Word } from '../entities/word';
 import { Repository } from 'typeorm';
 import { WordType } from 'src/aiservice-module/models/word_type';
 

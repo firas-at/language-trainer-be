@@ -1,4 +1,4 @@
-import { UserWord } from '../models/user_word';
+import { UserWord } from '../entities/user_word';
 
 export abstract class UserWordsRepository {
   abstract insert(userId: number, word: string);

@@ -1,5 +1,5 @@
 import { WordType } from 'src/aiservice-module/models/word_type';
-import { Word } from '../models/word';
+import { Word } from '../entities/word';
 
 export abstract class WordsRepository {
   abstract insert(word: string, type: WordType, info: any);

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UserWordsController } from './controllers/user_words.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserWord } from './models/user_word';
+import { UserWord } from './entities/user_word';
 import { UserWordsRepository } from './repositories/user-words.repository';
 import { UserWordsMysqlRepository } from './repositories/user-words_mysql_repository';
 import { UserWordManagerService } from './services/user_words_manager.service';

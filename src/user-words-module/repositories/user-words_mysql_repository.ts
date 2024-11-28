@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserWordsRepository } from './user-words.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserWord } from '../models/user_word';
+import { UserWord } from '../entities/user_word';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -13,12 +13,12 @@ export class UserWordsMysqlRepository extends UserWordsRepository {
     super();
   }
 
-  insert(userId: number, word: string) {
-    const newUserWord = this.userWordsRepository.create({ userId, word }); // Creates a new User instance
+  insert(user: number, word: string) {
+    const newUserWord = this.userWordsRepository.create({ user, word }); // Creates a new User instance
     return this.userWordsRepository.save(newUserWord); // Saves it to the database
   }
 
-  async findAll(userId: number, word?: string): Promise<UserWord[]> {
-    return await this.userWordsRepository.find({ where: { userId, word } });
+  async findAll(user: number, word?: string): Promise<UserWord[]> {
+    return await this.userWordsRepository.find({ where: { user, word } });
   }
 }

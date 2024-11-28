@@ -4,10 +4,10 @@ import { UserWordsModule } from './user-words-module/user-words.module';
 import { AIServiceModule } from './aiservice-module/aiservice.module';
 import { UsersModule } from './users-module/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from './users-module/db/entities/user.entity';
-import { UserWordEntity } from './user-words-module/db/entities/user_word.entity';
 import { WordsModule } from './words-module/words.module';
-import { WordEntity } from './words-module/db/entities/word.entity';
+import { User } from './users-module/entities/user';
+import { Word } from './words-module/entities/word';
+import { UserWord } from './user-words-module/entities/user_word';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { WordEntity } from './words-module/db/entities/word.entity';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [UserEntity, WordEntity, UserWordEntity],
+      entities: [User, Word, UserWord],
       synchronize: true,
     }),
     ConfigModule.forRoot({ isGlobal: true }),

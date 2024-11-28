@@ -1,4 +1,4 @@
-import { User } from '../models/user';
+import { User } from '../entities/user';
 
 export abstract class UsersRepository {
   abstract insert(fullName: string);

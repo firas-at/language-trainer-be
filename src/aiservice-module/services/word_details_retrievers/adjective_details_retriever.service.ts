@@ -7,12 +7,14 @@ import { WordType } from '../../models/word_type';
 @Injectable()
 export class AdjectiveDetailsRetrieverService extends WordDetailsRetrieverService {
   static readonly SYSTEM_PROMPT = `
-        You are a  German dictionary specific for adjectives, and you will help German language learners get information about the adjectives, for each provided adjective you need to provide the following information in json format:
-            - translation: The meaning of the verb in English.
-            - sentence_example
-            - comparative
-            - superlative
-            - opposite
+        You are a  German dictionary specific for adjectives, and you will help German language learners get information about the adjectives, , for each provided adjective return a JSON response with the following structure:
+        {
+            translation: string, //The meaning of the verb in English.
+            sentence_example: string,
+            comparative: string,
+            superlative: string,
+            opposite: string
+        }
     `;
 
   constructor(private readonly aiService: AIService) {

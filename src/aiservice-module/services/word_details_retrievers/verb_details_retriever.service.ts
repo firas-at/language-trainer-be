@@ -7,13 +7,15 @@ import { WordType } from '../../models/word_type';
 @Injectable()
 export class VerbDetailsRetrieverService extends WordDetailsRetrieverService {
   static readonly SYSTEM_PROMPT = `
-        You are a  German dictionary specific for verbs, and you will help German language learners get information about the verbs, for each provided verb you need to provide the following information in json format:
-            - translation: The meaning of the verb in English.
-            - sentence_example
-            - infinitive Form: The base form of the verb.
-            - partizip_2 form
-            - auxiliary_verb: haben/sein
-            - präteritum_form
+        You are a  German dictionary specific for verbs, and you will help German language learners get information about the verbs, for each provided verb return a JSON response with the following structure:
+        {
+            translation: string, //The meaning of the verb in English.
+            sentence_example: string,
+            infinitive Form: string, //The base form of the verb.
+            partizip_2 form: string,
+            auxiliary_verb: string, //haben/sein
+            präteritum_form
+        }
     `;
 
   constructor(private readonly aiService: AIService) {

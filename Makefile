@@ -21,7 +21,7 @@ help:
 build:
 	@echo "Building and starting containers with docker-compose..."
 	$(DOCKER_COMPOSE) up --build
-	
+
 # Command to run docker-compose up without build
 start:
 	@echo "Starting containers with docker-compose..."

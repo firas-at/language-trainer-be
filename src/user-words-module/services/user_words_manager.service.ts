@@ -1,8 +1,8 @@
-import { WordsRepository } from 'src/words-module/repositories/words.repository';
+import { WordsRepository } from '../../words-module/repositories/words.repository';
 import { UserWordsRepository } from '../repositories/user_words.repository';
-import { UsersRepository } from 'src/users-module/repositories/users.repository';
+import { UsersRepository } from '../../users-module/repositories/users.repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { GetWordInfoFromAIService } from 'src/aiservice-module/services/get_word_info_from_ai.service';
+import { GetWordInfoFromAIService } from '../../aiservice-module/services/get_word_info_from_ai.service';
 
 @Injectable()
 export class UserWordManagerService {

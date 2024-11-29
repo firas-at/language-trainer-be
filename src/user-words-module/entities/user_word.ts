@@ -1,6 +1,6 @@
-import { BaseDBEntity } from 'src/shared/base_db_entity';
-import { User } from 'src/users-module/entities/user';
-import { Word } from 'src/words-module/entities/word';
+import { BaseDBEntity } from '../../shared/base_db_entity';
+import { User } from '../../users-module/entities/user';
+import { Word } from '../../words-module/entities/word';
 import { Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity({ name: 'users_words' })

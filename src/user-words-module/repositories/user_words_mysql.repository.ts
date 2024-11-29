@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { UserWordsRepository } from './user-words.repository';
+import { UserWordsRepository } from './user_words.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserWord } from '../entities/user_word';
 import { Repository } from 'typeorm';

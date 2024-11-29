@@ -2,6 +2,7 @@ import { ConfigService } from '@nestjs/config';
 import { OpenAI } from 'openai';
 import { OpenAIService } from '../openai.service';
 import { Test, TestingModule } from '@nestjs/testing';
+import { InternalServerErrorException } from '@nestjs/common';
 
 jest.mock('openai', () => ({
   OpenAI: jest.fn().mockImplementation(() => ({
@@ -91,6 +92,16 @@ describe('OpenAIService', () => {
       const result = await service.run('system role', 'user input');
 
       expect(result).toEqual('Test response');
+    });
+
+    it("should throw an error if open ai didn't work", async () => {
+      (service.openai.chat.completions.create as jest.Mock).mockRejectedValue(
+        new InternalServerErrorException('error'),
+      );
+
+      await expect(() =>
+        service.run('system role', 'user input'),
+      ).rejects.toThrow(InternalServerErrorException);
     });
   });
 });

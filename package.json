@@ -80,10 +80,12 @@
       "**/*.(t|j)s"
     ],
     "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/entities/",
+      "node_modules",
+      "entities",
       "dtos",
-      "models"
+      "models",
+      "\\.module\\.ts$",
+      "main.ts"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"

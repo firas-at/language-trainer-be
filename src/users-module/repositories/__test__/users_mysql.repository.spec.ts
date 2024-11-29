@@ -35,25 +35,32 @@ describe('UsersMysqlRepository', () => {
   describe('addUser', () => {
     it('should successfully add a user', async () => {
       const fullName = 'Test User';
-      const mockUser: User = { id: 1, fullName } as User;
+      const username = 'User Name';
+      const mockUser = new User();
+      mockUser.id = 1;
+      mockUser.fullName = fullName;
+      mockUser.username = username;
 
       userRepository.create.mockReturnValue(mockUser);
       userRepository.save.mockResolvedValue(mockUser);
 
-      const result = await repository.addUser(fullName);
+      const result = await repository.addUser(username, fullName, '');
 
-      expect(userRepository.create).toHaveBeenCalledWith({ fullName });
+      expect(userRepository.create).toHaveBeenCalledWith({
+        username,
+        fullName,
+      });
       expect(userRepository.save).toHaveBeenCalledWith(mockUser);
       expect(result).toEqual(mockUser);
     });
 
     it('should throw an InternalServerErrorException if adding user fails', async () => {
       const fullName = 'Test User';
-
+      const username = 'User name';
       userRepository.create.mockReturnValue(new User());
       userRepository.save.mockRejectedValue(new Error('Database error'));
 
-      await expect(repository.addUser(fullName)).rejects.toThrow(
+      await expect(repository.addUser(username, fullName, '')).rejects.toThrow(
         new InternalServerErrorException(
           'Error adding user: Error: Database error',
         ),

@@ -13,10 +13,15 @@ export class UsersMysqlRepository extends UsersRepository {
     super();
   }
 
-  async addUser(fullName: string) {
+  async addUser(
+    username: string,
+    fullName: string,
+    password: string,
+  ): Promise<User> {
     try {
-      const newUser = this.userRepository.create({ fullName }); // Creates a new User instance
-      return await this.userRepository.save(newUser); // Saves it to the database
+      const newUser = this.userRepository.create({ username, fullName });
+      await newUser.setPassword(password); // Hash the password before saving
+      return await this.userRepository.save(newUser);
     } catch (error) {
       throw new InternalServerErrorException(`Error adding user: ${error}`);
     }
@@ -28,6 +33,16 @@ export class UsersMysqlRepository extends UsersRepository {
     } catch (error) {
       throw new InternalServerErrorException(
         `Error getting all users: ${error}`,
+      );
+    }
+  }
+
+  async getUserByUsername(username: string): Promise<User | null> {
+    try {
+      return await this.userRepository.findOne({ where: { username } });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Error getting user by username: ${error}`,
       );
     }
   }

@@ -17,10 +17,10 @@ export class UserWordsMysqlRepository extends UserWordsRepository {
 
   async addWordToUser(user: User, word: Word): Promise<UserWord> {
     try {
-      const userWord = await this.getUserWordForUser(user, word);
+      let userWord = await this.getUserWordForUser(user, word);
 
       if (!userWord) {
-        const userWord = this.userWordsRepository.create({ user, word });
+        userWord = this.userWordsRepository.create({ user, word });
         await this.userWordsRepository.save(userWord);
       }
 

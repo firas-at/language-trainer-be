@@ -1,6 +1,6 @@
-import { WordType } from 'src/aiservice-module/models/word_type';
-import { BaseDBEntity } from 'src/shared/base_db_entity';
-import { UserWord } from 'src/user-words-module/entities/user_word';
+import { WordType } from '../../aiservice-module/models/word_type';
+import { BaseDBEntity } from '../../shared/base_db_entity';
+import { UserWord } from '../../user-words-module/entities/user_word';
 import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity('words')

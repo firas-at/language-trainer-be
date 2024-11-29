@@ -36,7 +36,6 @@ export class GeminiService implements AIService {
       });
 
       const result = await chatSession.sendMessage('');
-      console.log(result.response.text());
       return result.response.text();
     } catch (error) {
       throw new InternalServerErrorException(

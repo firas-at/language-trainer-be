@@ -31,4 +31,4 @@ jobs:
 
       # Run the tests
       - name: Run tests
-        run: npm run test -- --ci --reporters=default --maxWorkers=2
+        run: npm run test -- --ci --reporters=default --maxWorkers=2 --coverage

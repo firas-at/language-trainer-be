@@ -6,6 +6,7 @@ import { UserDecorator } from '../../users-module/decorators/user.decorator';
 import { User } from '../../users-module/entities/user';
 import { UserWordsRepository } from '../repositories/user_words.repository';
 import { GetAllUserWordsDTO } from '../dtos/get_all_user_words.dto';
+import { AddWordDTO } from '../dtos/add_word.dto';
 
 @ApiTags('User Words Module')
 @UseGuards(JwtAuthGuard)
@@ -19,9 +20,12 @@ export class UserWordsController {
   @Post()
   async addWord(
     @UserDecorator() user: User,
-    @Body() dto: { word: string },
+    @Body() addWordDto: AddWordDTO,
   ): Promise<any> {
-    return await this.userWordManagerService.getWordInfo(user.id, dto.word);
+    return await this.userWordManagerService.getWordInfo(
+      user.id,
+      addWordDto.word,
+    );
   }
 
   @Get()

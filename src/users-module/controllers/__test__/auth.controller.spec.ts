@@ -4,6 +4,8 @@ import { AuthService } from '../../services/auth.service';
 import { SignUpDto } from '../../dtos/signup.dto';
 import { SignInDto } from '../../dtos/signin.dto';
 import { User } from '../../entities/user';
+import { JwtService } from '@nestjs/jwt';
+import { UsersRepository } from '../../repositories/users.repository';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -17,7 +19,11 @@ describe('AuthController', () => {
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [{ provide: AuthService, useValue: mockAuthService }],
+      providers: [
+        { provide: AuthService, useValue: mockAuthService },
+        JwtService,
+        { provide: UsersRepository, useValue: {} },
+      ],
     }).compile();
 
     authController = module.get<AuthController>(AuthController);
@@ -66,6 +72,30 @@ describe('AuthController', () => {
         mockSignInDto.password,
       );
       expect(result).toEqual(mockAccessToken);
+    });
+  });
+
+  describe('getProfile', () => {
+    it('should return the DTO of the logged-in user', () => {
+      const mockUser = {
+        id: 1,
+        username: 'testuser',
+        fullName: 'Test User',
+        getDTO: jest.fn().mockReturnValue({
+          id: 1,
+          username: 'testuser',
+          fullName: 'Test User',
+        }),
+      } as unknown as User;
+
+      const result = authController.getProfile(mockUser);
+
+      expect(mockUser.getDTO).toHaveBeenCalled();
+      expect(result).toEqual({
+        id: 1,
+        username: 'testuser',
+        fullName: 'Test User',
+      });
     });
   });
 });

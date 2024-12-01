@@ -5,6 +5,7 @@ import { UsersRepository } from './repositories/users.repository';
 import { User } from './entities/user';
 import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
@@ -14,6 +15,7 @@ import { AuthService } from './services/auth.service';
       useClass: UsersMysqlRepository,
     },
     AuthService,
+    JwtService,
   ],
   exports: [UsersRepository],
   controllers: [AuthController],

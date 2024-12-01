@@ -17,7 +17,7 @@ export class AuthController {
       signUpDto.fullName,
       signUpDto.password,
     );
-    return user;
+    return user.getDTO();
   }
 
   @ApiOperation({ summary: 'Sign in with a user' })

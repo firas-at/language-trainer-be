@@ -20,12 +20,7 @@ export class AuthService {
     if (existingUser) {
       throw new UnauthorizedException('Username already exists');
     }
-    const addedUser = this.usersRepository.addUser(
-      username,
-      fullName,
-      password,
-    );
-    return this.usersRepository.getUser(addedUser.id);
+    return this.usersRepository.addUser(username, fullName, password);
   }
 
   async signIn(

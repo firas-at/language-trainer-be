@@ -39,7 +39,8 @@ export class UsersMysqlRepository extends UsersRepository {
 
   async getUserByUsername(username: string): Promise<User | null> {
     try {
-      return await this.userRepository.findOne({ where: { username } });
+      const users = await this.userRepository.find({ where: { username } });
+      return users.length > 0 ? users[0] : null;
     } catch (error) {
       throw new InternalServerErrorException(
         `Error getting user by username: ${error}`,

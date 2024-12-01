@@ -121,4 +121,43 @@ describe('UsersMysqlRepository', () => {
       );
     });
   });
+
+  describe('getUserByUsername', () => {
+    it('should return a user by username', async () => {
+      const mockUser: User = {
+        id: 1,
+        fullName: 'Test User',
+        username: 'username',
+      } as User;
+      userRepository.find.mockResolvedValue([mockUser]);
+
+      const result = await repository.getUserByUsername('username');
+
+      expect(userRepository.find).toHaveBeenCalledWith({
+        where: { username: 'username' },
+      });
+      expect(result).toEqual(mockUser);
+    });
+
+    it('should return null if user is not found', async () => {
+      userRepository.find.mockResolvedValue([]);
+
+      const result = await repository.getUserByUsername('username');
+
+      expect(userRepository.find).toHaveBeenCalledWith({
+        where: { username: 'username' },
+      });
+      expect(result).toBeNull();
+    });
+
+    it('should throw an InternalServerErrorException if getting user by username fails', async () => {
+      userRepository.find.mockRejectedValue(new Error('Database error'));
+
+      await expect(repository.getUserByUsername('username')).rejects.toThrow(
+        new InternalServerErrorException(
+          'Error getting user by username: Error: Database error',
+        ),
+      );
+    });
+  });
 });

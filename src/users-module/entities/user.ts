@@ -13,7 +13,7 @@ export class User extends BaseDBEntity {
   fullName: string;
 
   @Exclude()
-  @Column({ select: false })
+  @Column()
   password: string;
 
   @OneToMany(() => UserWord, (userWord) => userWord.user)
@@ -25,5 +25,13 @@ export class User extends BaseDBEntity {
 
   async validatePassword(password: string): Promise<boolean> {
     return argon2.verify(this.password, password);
+  }
+
+  getDTO() {
+    return {
+      id: this.id,
+      username: this.username,
+      fullName: this.fullName,
+    };
   }
 }

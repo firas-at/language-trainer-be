@@ -107,21 +107,26 @@ describe('UserWordsMysqlRepository', () => {
       const word2 = new Word();
       const userWords = [{ word: word1 }, { word: word2 }];
 
-      userWordsRepoMock.find.mockResolvedValue(userWords as UserWord[]);
+      const testModuleResult = await getUserWordsMysqlRepository(
+        userWords as UserWord[],
+      );
+      repository = testModuleResult.repository;
+      userWordsRepoMock = testModuleResult.userWordsRepoMock;
 
       const result = await repository.getWordsForUser(user);
 
-      expect(userWordsRepoMock.find).toHaveBeenCalledWith({
-        where: { user },
-        relations: ['word'],
-      });
       expect(result).toEqual([word1, word2]);
     });
 
     it('should throw an InternalServerErrorException on failure', async () => {
       const user = new User();
 
-      userWordsRepoMock.find.mockRejectedValue(new Error('Database error'));
+      const testModuleResult = await getUserWordsMysqlRepository(
+        [],
+        jest.fn().mockRejectedValue(new Error('Database error')),
+      );
+      repository = testModuleResult.repository;
+      userWordsRepoMock = testModuleResult.userWordsRepoMock;
 
       await expect(repository.getWordsForUser(user)).rejects.toThrow(
         InternalServerErrorException,

@@ -34,10 +34,12 @@ export class UserWordsMysqlRepository extends UserWordsRepository {
 
   async getWordsForUser(user: User): Promise<Word[]> {
     try {
-      const userWords = await this.userWordsRepository.find({
-        where: { user },
-        relations: ['word'], // Load the related Word entity
-      });
+      const userWords = await this.userWordsRepository
+        .createQueryBuilder('UserWord')
+        .leftJoinAndSelect('UserWord.word', 'word')
+        .leftJoinAndSelect('UserWord.user', 'user')
+        .where('user.id = :userId', { userId: user.id })
+        .getMany();
 
       return userWords.map((userWord) => userWord.word); // Extract Word objects
     } catch (error) {

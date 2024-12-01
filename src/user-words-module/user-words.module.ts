@@ -8,6 +8,7 @@ import { UserWordManagerService } from './services/user_words_manager.service';
 import { UsersModule } from 'src/users-module/users.module';
 import { WordsModule } from 'src/words-module/words.module';
 import { AIServiceModule } from 'src/aiservice-module/aiservice.module';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AIServiceModule } from 'src/aiservice-module/aiservice.module';
       useClass: UserWordsMysqlRepository,
     },
     UserWordManagerService,
+    JwtService,
   ],
   controllers: [UserWordsController],
 })

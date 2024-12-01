@@ -5,6 +5,9 @@ import { UserWordsRepository } from '../../repositories/user_words.repository';
 import { JwtAuthGuard } from '../../../users-module/guards/jwt_auth.guard';
 import { User } from '../../../users-module/entities/user';
 import { InternalServerErrorException } from '@nestjs/common';
+import { GetAllUserWordsDTO } from 'src/user-words-module/dtos/get_all_user_words.dto';
+import { UserWordsSortBy } from '../../dtos/user_words_sort_by';
+import { SortingOptions } from '../../../shared/sorting_options';
 
 // Mocking the services and dependencies
 const mockUserWordManagerService = {
@@ -80,15 +83,23 @@ describe('UserWordsController', () => {
         { key: 'word1', type: 'noun', info: {} },
         { key: 'word2', type: 'verb', info: {} },
       ];
+      const types: GetAllUserWordsDTO = {
+        types: [],
+        sort_by: UserWordsSortBy.createdAt,
+        sort_order: SortingOptions.asc,
+      };
 
       // Mocking repository method to return a list of words
       mockUserWordsRepository.getWordsForUser.mockResolvedValue(words);
 
-      const result = await controller.getAllWords(user);
+      const result = await controller.getAllWords(user, types);
 
       expect(result).toEqual(words);
       expect(mockUserWordsRepository.getWordsForUser).toHaveBeenCalledWith(
         user,
+        [],
+        UserWordsSortBy.createdAt,
+        SortingOptions.asc,
       );
     });
 
@@ -101,7 +112,11 @@ describe('UserWordsController', () => {
       );
 
       try {
-        await controller.getAllWords(user);
+        await controller.getAllWords(user, {
+          types: [],
+          sort_by: UserWordsSortBy.createdAt,
+          sort_order: SortingOptions.asc,
+        });
       } catch (error) {
         expect(error).toBeInstanceOf(InternalServerErrorException);
       }

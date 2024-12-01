@@ -6,6 +6,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from '../../../users-module/entities/user';
 import { Word } from '../../../words-module/entities/word';
 import { InternalServerErrorException } from '@nestjs/common';
+import { WordType } from '../../../aiservice-module/models/word_type';
 
 async function getUserWordsMysqlRepository(
   userWords: UserWord[],
@@ -21,6 +22,7 @@ async function getUserWordsMysqlRepository(
     createQueryBuilder: jest.fn(() => ({
       leftJoinAndSelect: jest.fn().mockReturnThis(),
       where: jest.fn().mockReturnThis(),
+      andWhere: jest.fn().mockReturnThis(),
       getMany: getMany ? getMany : jest.fn(() => userWords),
     })),
   } as unknown as jest.Mocked<Repository<UserWord>>;
@@ -131,6 +133,19 @@ describe('UserWordsMysqlRepository', () => {
       await expect(repository.getWordsForUser(user)).rejects.toThrow(
         InternalServerErrorException,
       );
+    });
+
+    it('should filter types if passed', async () => {
+      const user = new User();
+      const wordTypes = [WordType.Noun];
+
+      const testModuleResult = await getUserWordsMysqlRepository([]);
+      repository = testModuleResult.repository;
+      userWordsRepoMock = testModuleResult.userWordsRepoMock;
+
+      await repository.getWordsForUser(user, wordTypes);
+
+      expect(userWordsRepoMock.createQueryBuilder).toHaveBeenCalled();
     });
   });
 

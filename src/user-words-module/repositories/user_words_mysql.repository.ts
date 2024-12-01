@@ -5,6 +5,9 @@ import { UserWord } from '../entities/user_word';
 import { Repository } from 'typeorm';
 import { Word } from 'src/words-module/entities/word';
 import { User } from 'src/users-module/entities/user';
+import { WordType } from '../../aiservice-module/models/word_type';
+import { UserWordsSortBy } from '../dtos/user_words_sort_by';
+import { SortingOptions } from '../../shared/sorting_options';
 
 @Injectable()
 export class UserWordsMysqlRepository extends UserWordsRepository {
@@ -32,14 +35,36 @@ export class UserWordsMysqlRepository extends UserWordsRepository {
     }
   }
 
-  async getWordsForUser(user: User): Promise<Word[]> {
+  async getWordsForUser(
+    user: User,
+    onlyWordTypes?: WordType[],
+    sortBy?: UserWordsSortBy,
+    sortOrder?: SortingOptions,
+  ): Promise<Word[]> {
     try {
-      const userWords = await this.userWordsRepository
+      let wordTypes = Object.values(WordType);
+
+      if (onlyWordTypes) {
+        wordTypes = onlyWordTypes;
+      }
+
+      const queryBuilder = await this.userWordsRepository
         .createQueryBuilder('UserWord')
         .leftJoinAndSelect('UserWord.word', 'word')
         .leftJoinAndSelect('UserWord.user', 'user')
         .where('user.id = :userId', { userId: user.id })
-        .getMany();
+        .andWhere('word.type IN (:...wordTypes)', { wordTypes }); // Add this line for filtering by type
+
+      if (sortBy) {
+        const sortingOrder = sortOrder
+          ? sortOrder == SortingOptions.asc
+            ? 'ASC'
+            : 'DESC'
+          : 'DESC';
+        queryBuilder.orderBy(`UserWord.${sortBy}`, sortingOrder);
+      }
+
+      const userWords = await queryBuilder.getMany();
 
       return userWords.map((userWord) => userWord.word); // Extract Word objects
     } catch (error) {

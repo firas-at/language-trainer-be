@@ -15,3 +15,8 @@ $ make build
 $ make start
 ```
 Using docker compose, this will build the app and the database docker images.
+
+## Development
+
+### Commit
+conventional commits are used in this repo, to make it easier to write commit messages, use `npm run commit` which uses **commitizen** to build the commit message in conventional commits format

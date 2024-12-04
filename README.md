@@ -6,7 +6,7 @@ It's built using NestJS and TypeORM for MySQL database.
 
 ## Project setup
 
-1. Make sure to compy `.env.sample` file into `.env` file and set the environment variables values
+1. Make sure to copy `.env.sample` file into `.env` file and set the environment variables values
 
 2. Execute the following:
 

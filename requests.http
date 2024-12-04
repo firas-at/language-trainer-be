@@ -1,0 +1,46 @@
+### Create a new user
+POST  http://localhost:3003/auth/signup
+Content-Type: application/json
+
+{
+  "username": "string",
+  "fullName": "string",
+  "password": "string"
+}
+
+### Sign in with a user
+POST  http://localhost:3003/auth/signin
+Content-Type: application/json
+
+{
+  "username": "string",
+  "password": "string"
+}
+
+###########################################################
+
+### Get logged in user
+GET http://localhost:3003/auth/me
+Authorization: Bearer YOUR_ACCESS_TOKEN
+
+### Get word
+POST  http://localhost:3003/user-words
+Content-Type: application/json
+Authorization: Bearer YOUR_ACCESS_TOKEN
+
+{
+  "word": "string"
+}
+
+### Get user words
+GET   http://localhost:3003/user-words
+Content-Type: application/json
+Authorization: Bearer YOUR_ACCESS_TOKEN
+
+{
+  "types": [
+    "Verb"
+  ],
+  "sort_by": "updatedAt",
+  "sort_order": "asc"
+}

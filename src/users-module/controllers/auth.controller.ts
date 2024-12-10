@@ -15,22 +15,20 @@ export class AuthController {
   @ApiOperation({ summary: 'Create new user' })
   @Post('signup')
   async signUp(@Body() signUpDto: SignUpDto) {
-    const user = await this.authService.signUp(
+    return await this.authService.signUp(
       signUpDto.username,
       signUpDto.fullName,
       signUpDto.password,
     );
-    return user.getDTO();
   }
 
   @ApiOperation({ summary: 'Sign in with a user' })
   @Post('signin')
   async signIn(@Body() signInDto: SignInDto) {
-    const { accessToken } = await this.authService.signIn(
+    return await this.authService.signIn(
       signInDto.username,
       signInDto.password,
     );
-    return { accessToken };
   }
 
   @Get('me')

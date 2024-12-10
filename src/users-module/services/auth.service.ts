@@ -3,6 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import { User } from '../entities/user';
 import { ConfigService } from '@nestjs/config'; // Import ConfigService
 import { UsersRepository } from '../repositories/users.repository';
+import { AuthResponseDto } from '../dtos/auth_response.dto';
 
 @Injectable()
 export class AuthService {
@@ -15,24 +16,32 @@ export class AuthService {
     username: string,
     fullName: string,
     password: string,
-  ): Promise<User> {
+  ): Promise<AuthResponseDto> {
     const existingUser = await this.usersRepository.getUserByUsername(username);
     if (existingUser) {
       throw new UnauthorizedException('Username already exists');
     }
-    return this.usersRepository.addUser(username, fullName, password);
+    const user = await this.usersRepository.addUser(
+      username,
+      fullName,
+      password,
+    );
+    return {
+      token: this.generateJwtToken(user),
+      user: user.getDTO(),
+    };
   }
 
-  async signIn(
-    username: string,
-    password: string,
-  ): Promise<{ accessToken: string }> {
+  async signIn(username: string, password: string): Promise<AuthResponseDto> {
     const user = await this.usersRepository.getUserByUsername(username);
     if (!user || !(await user.validatePassword(password))) {
       throw new UnauthorizedException('Invalid username or password');
     }
-    const accessToken = this.generateJwtToken(user);
-    return { accessToken };
+
+    return {
+      token: this.generateJwtToken(user),
+      user: user.getDTO(),
+    };
   }
 
   private generateJwtToken(user: User): string {

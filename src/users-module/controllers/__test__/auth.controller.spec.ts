@@ -6,6 +6,7 @@ import { SignInDto } from '../../dtos/signin.dto';
 import { User } from '../../entities/user';
 import { JwtService } from '@nestjs/jwt';
 import { UsersRepository } from '../../repositories/users.repository';
+import { AuthResponseDto } from 'src/users-module/dtos/auth_response.dto';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -40,11 +41,15 @@ describe('AuthController', () => {
         password: 'testpassword',
       };
 
-      const mockUser = new User();
-      mockUser.id = 1;
-      mockUser.username = 'testuser';
-      mockUser.fullName = 'Test User';
-      authService.signUp.mockResolvedValueOnce(mockUser);
+      const mockResponse: AuthResponseDto = {
+        token: 'mock-token',
+        user: {
+          id: 1,
+          username: 'testuser',
+          fullName: 'Test User',
+        },
+      };
+      authService.signUp.mockResolvedValueOnce(mockResponse);
 
       const result = await authController.signUp(mockSignUpDto);
       expect(authService.signUp).toHaveBeenCalledWith(
@@ -52,7 +57,7 @@ describe('AuthController', () => {
         mockSignUpDto.fullName,
         mockSignUpDto.password,
       );
-      expect(result).toEqual(mockUser);
+      expect(result).toEqual(mockResponse);
     });
   });
 
@@ -63,15 +68,22 @@ describe('AuthController', () => {
         password: 'testpassword',
       };
 
-      const mockAccessToken = { accessToken: 'mock-token' };
-      authService.signIn.mockResolvedValueOnce(mockAccessToken);
+      const mockResponse: AuthResponseDto = {
+        token: 'mock-token',
+        user: {
+          id: 1,
+          username: 'testuser',
+          fullName: 'Test User',
+        },
+      };
+      authService.signIn.mockResolvedValueOnce(mockResponse);
 
       const result = await authController.signIn(mockSignInDto);
       expect(authService.signIn).toHaveBeenCalledWith(
         mockSignInDto.username,
         mockSignInDto.password,
       );
-      expect(result).toEqual(mockAccessToken);
+      expect(result).toEqual(mockResponse);
     });
   });
 

@@ -55,17 +55,39 @@ describe('AuthService', () => {
     });
 
     it('should successfully create and return a new user', async () => {
-      const newUser = { id: 1 } as User;
+      const mockUser = {
+        id: 1,
+        username: 'testuser',
+        fullName: 'Test User',
+        validatePassword: jest.fn(),
+        getDTO: jest.fn().mockReturnValue({
+          id: 1,
+          username: 'testuser',
+          fullName: 'Test User',
+        }),
+      } as any;
       usersRepository.getUserByUsername.mockResolvedValueOnce(null);
-      usersRepository.addUser.mockResolvedValueOnce(newUser);
-      usersRepository.getUser.mockResolvedValueOnce(newUser);
+      usersRepository.addUser.mockResolvedValueOnce(mockUser);
+      usersRepository.getUser.mockResolvedValueOnce(mockUser);
+
+      const mockToken = 'mockToken';
+      const mockResponse = {
+        token: mockToken,
+        user: {
+          id: mockUser.id,
+          username: mockUser.username,
+          fullName: mockUser.fullName,
+        },
+      };
+      (jwt.sign as jest.Mock).mockReturnValueOnce(mockToken);
+      configService.get('JWT_SECRET');
 
       const result = await authService.signUp(
         'newUser',
         'New User',
         'password',
       );
-      expect(result).toEqual(newUser);
+      expect(result).toEqual(mockResponse);
       expect(usersRepository.addUser).toHaveBeenCalledWith(
         'newUser',
         'New User',
@@ -82,21 +104,35 @@ describe('AuthService', () => {
       ).rejects.toThrow(UnauthorizedException);
     });
 
-    it('should return an access token for valid credentials', async () => {
+    it('should return a valid response for valid credentials', async () => {
       const mockUser = {
         id: 1,
-        username: 'validUser',
+        username: 'testuser',
+        fullName: 'Test User',
         validatePassword: jest.fn(),
+        getDTO: jest.fn().mockReturnValue({
+          id: 1,
+          username: 'testuser',
+          fullName: 'Test User',
+        }),
       } as any;
       mockUser.validatePassword.mockResolvedValueOnce(true);
       usersRepository.getUserByUsername.mockResolvedValueOnce(mockUser);
 
       const mockToken = 'mockToken';
+      const mockResponse = {
+        token: mockToken,
+        user: {
+          id: mockUser.id,
+          username: mockUser.username,
+          fullName: mockUser.fullName,
+        },
+      };
       (jwt.sign as jest.Mock).mockReturnValueOnce(mockToken);
       configService.get('JWT_SECRET');
 
       const result = await authService.signIn('validUser', 'password');
-      expect(result).toEqual({ accessToken: mockToken });
+      expect(result).toEqual(mockResponse);
       expect(jwt.sign).toHaveBeenCalledWith(
         { sub: mockUser.id, username: mockUser.username },
         'mockSecret',

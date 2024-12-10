@@ -89,6 +89,8 @@
       "entities",
       "dtos",
       "models",
+      "filters",
+      "middleware",
       "\\.module\\.ts$",
       "main.ts"
     ],

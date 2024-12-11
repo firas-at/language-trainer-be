@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { User } from '../entities/user';
 import { ConfigService } from '@nestjs/config'; // Import ConfigService
@@ -19,7 +23,7 @@ export class AuthService {
   ): Promise<AuthResponseDto> {
     const existingUser = await this.usersRepository.getUserByUsername(username);
     if (existingUser) {
-      throw new UnauthorizedException('Username already exists');
+      throw new ConflictException('Username already exists');
     }
     const user = await this.usersRepository.addUser(
       username,

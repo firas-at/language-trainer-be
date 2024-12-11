@@ -3,6 +3,7 @@ import { UserWord } from '../../user-words-module/entities/user_word';
 import { Column, Entity, OneToMany } from 'typeorm';
 import * as argon2 from 'argon2';
 import { Exclude } from 'class-transformer';
+import { UserDto } from '../dtos/user.dto';
 
 @Entity({ name: 'users' })
 export class User extends BaseDBEntity {
@@ -27,7 +28,7 @@ export class User extends BaseDBEntity {
     return argon2.verify(this.password, password);
   }
 
-  getDTO() {
+  getDTO(): UserDto {
     return {
       id: this.id,
       username: this.username,

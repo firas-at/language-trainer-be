@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config';
-import { UnauthorizedException } from '@nestjs/common';
+import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { AuthService } from '../auth.service';
 import { UsersRepository } from '../../repositories/users.repository';
@@ -51,7 +51,7 @@ describe('AuthService', () => {
       usersRepository.getUserByUsername.mockResolvedValueOnce(new User());
       await expect(
         authService.signUp('existingUser', 'Test User', 'password123'),
-      ).rejects.toThrow(UnauthorizedException);
+      ).rejects.toThrow(ConflictException);
     });
 
     it('should successfully create and return a new user', async () => {

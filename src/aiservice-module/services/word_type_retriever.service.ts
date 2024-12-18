@@ -1,6 +1,13 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { AIService } from './ai_services/ai.service';
-import { WordTypeResponse } from 'src/aiservice-module/models/responses/word_type_response';
+import {
+  WordTypeErrorResponse,
+  WordTypeResponse,
+} from 'src/aiservice-module/models/responses/word_type_response';
 
 @Injectable()
 export class WordTypeRetrieverService {
@@ -10,7 +17,11 @@ export class WordTypeRetrieverService {
         2. Nouns
         3. Adjectives
         4. Adverbs
-    For each word provided by the user, return a JSON response with the key the following structure: 
+    For each word provided by the user, check if the word is a valid German word, if it is not, return an error message like this:
+    {
+        error: "The word is not a valid German word"
+    }
+    if it is a valid German word, return a JSON response with the key the following structure: 
     {
         word: string //the original word
         type: WordType // Verb, Noun, Adjective, Adverb
@@ -24,7 +35,13 @@ export class WordTypeRetrieverService {
         WordTypeRetrieverService.SYSTEM_PROMPT,
         word,
       );
-      return JSON.parse(response) as WordTypeResponse;
+      const obj = JSON.parse(response) as
+        | WordTypeResponse
+        | WordTypeErrorResponse;
+      if ('error' in obj) {
+        throw new BadRequestException(obj.error);
+      }
+      return obj;
     } catch (error) {
       throw new InternalServerErrorException(
         `Error getting word type: ${error}`,

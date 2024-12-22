@@ -26,6 +26,10 @@ describe('WordTypeRetrieverService', () => {
       type: WordType.Verb,
     });
 
+    const mockErrorResponse = JSON.stringify({
+      error: 'not a valid error',
+    });
+
     const mockWord = 'laufen';
 
     beforeEach(() => {
@@ -54,6 +58,12 @@ describe('WordTypeRetrieverService', () => {
       jest
         .spyOn(openAIService, 'run')
         .mockRejectedValue(new InternalServerErrorException('error')); // Mock run method of OpenAIService
+
+      await expect(() => service.run(mockWord)).rejects.toThrow('error');
+    });
+
+    it('should throw an error if open AI returned an error response', async () => {
+      jest.spyOn(openAIService, 'run').mockResolvedValue(mockErrorResponse); // Mock run method of OpenAIService
 
       await expect(() => service.run(mockWord)).rejects.toThrow('error');
     });

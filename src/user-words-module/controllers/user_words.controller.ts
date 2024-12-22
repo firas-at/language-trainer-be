@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserWordManagerService } from '../services/user_words_manager.service';
 import { JwtAuthGuard } from '../../users-module/guards/jwt_auth.guard';
@@ -57,7 +57,7 @@ export class UserWordsController {
   })
   async getAllWords(
     @UserDecorator() user: User,
-    @Body() getAllWordsDto: GetAllUserWordsDTO,
+    @Query() getAllWordsDto: GetAllUserWordsDTO,
   ): Promise<Word[]> {
     return await this.userWordsRepository.getWordsForUser(
       user,

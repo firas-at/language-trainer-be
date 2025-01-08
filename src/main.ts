@@ -26,6 +26,13 @@ async function bootstrap() {
   // Setup Swagger module
   SwaggerModule.setup('api', app, document);
 
+  // Enable CORS for local development
+  app.enableCors({
+    origin: 'http://localhost:3000', // Replace with your frontend URL
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
+
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT', 3000);
   await app.listen(port);

@@ -12,17 +12,21 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: (process.env.DB_TYPE as any) || 'mysql',
       host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT, 10), // Ensure port is a number
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [User, Word, UserWord],
       synchronize: true,
       logging: false,
+      ssl: {
+        rejectUnauthorized: false,
+      },
     }),
-    ConfigModule.forRoot({ isGlobal: true }),
     AIServiceModule,
     UsersModule,
     WordsModule,

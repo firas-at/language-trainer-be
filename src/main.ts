@@ -26,11 +26,13 @@ async function bootstrap() {
   // Setup Swagger module
   SwaggerModule.setup('api', app, document);
 
-  // Enable CORS for local development
   app.enableCors({
-    origin: 'http://localhost:3000', // Replace with your frontend URL
+    origin: [
+      'http://localhost:3000',
+      'https://language-trainer-fe.onrender.com',
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    credentials: true,
+    credentials: true, // If you are using cookies or authentication
   });
 
   const configService = app.get(ConfigService);

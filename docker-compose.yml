@@ -19,7 +19,7 @@ services:
     command: ['npm', 'run', 'start:dev']
 
   db:
-    image: mysql:9.1
+    image: mysql:9.2
     environment:
       MYSQL_DATABASE: $DB_NAME
       MYSQL_USER: $DB_USER

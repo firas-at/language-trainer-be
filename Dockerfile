@@ -1,23 +1,23 @@
-# Step 1: Use the official Node.js image as the base image
-FROM node:22-alpine
-
-# Step 2: Set the working directory inside the container
+#Development
+FROM node:22-alpine AS dev
 WORKDIR /app
-
-# Step 3: Copy the package.json and package-lock.json (or yarn.lock) files into the container
 COPY package*.json ./
-
-# Step 4: Install the dependencies in the container
-RUN npm install --production
-
-# Step 5: Copy the rest of the application code into the container
+RUN npm install
 COPY . .
+EXPOSE 3000
+RUN npm install -g ts-node typescript
 
-# Step 6: Build the NestJS application
+# Build stage
+FROM node:22-alpine AS builder
+WORKDIR /app
+COPY --from=dev /app .
 RUN npm run build
 
-# Step 7: Expose the port that the app will run on (default for NestJS is 3000)
+FROM node:22-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install --production && \
+    npm cache clean --force
+COPY --from=builder /app/dist ./dist
 EXPOSE 3000
-
-# Step 8: Run the application
 CMD ["npm", "run", "start:prod"]

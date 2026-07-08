@@ -1,5 +1,5 @@
 #Development
-FROM node:22-alpine AS dev
+FROM node:24-alpine AS dev
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
@@ -8,12 +8,12 @@ EXPOSE 3000
 RUN npm install -g ts-node typescript
 
 # Build stage
-FROM node:22-alpine AS builder
+FROM node:24-alpine AS builder
 WORKDIR /app
 COPY --from=dev /app .
 RUN npm run build
 
-FROM node:22-alpine
+FROM node:24-alpine
 WORKDIR /app
 COPY package*.json ./
 RUN npm install --production --omit=dev && \
